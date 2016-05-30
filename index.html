@@ -157,65 +157,6 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 		<script src="https://api.trello.com/1/client.js?key=d7d185822894d8a661ba04d0503e5d85"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-		<script type="text/javascript">
-			$(function(){
-				Trello.authorize({
-					type: 'redirect',
-					name: 'Getting Started Application',
-					scope: {
-						read: true,
-					},
-					interactive: false,
-					expiration: 'never'
-				});
-
-				Trello.rest('get', 'boards/zZPDBuHA/lists', function(data){
-					var lists = [];
-					var last_date = '';
-
-					data.forEach(function(list, index, array) {
-						if(list.name.substr(0, 1) != '#')
-							lists.push(list);
-					});
-
-					var current = lists.shift();
-					$('#current .panel-heading').html('Versão atual | '+ current.name);
-					Trello.rest('get', 'lists/'+ current.id +'/cards', function(cards){
-						cards.forEach(function(card, index, array) {
-							append_card('#current .panel-body', card);
-						});
-					});
-					
-					var next = -1;
-					for (var i =  0; i < Math.ceil(lists.length / 2); i++) {
-						var days = (i+1)*90;
-
-						var list_one = lists[++next];
-						var list_two = lists[++next];
-
-						$('#content').append('<div class="panel panel-primary col-md-9"><div class="panel-heading">Próximos '+ days +' dias</div><div class="panel-body row '+ list_one.id +' '+ (list_two ? list_two.id : '') +'"></div></div>');
-
-						Trello.rest('get', 'lists/'+ list_one.id +'/cards', function(cards){
-							cards.forEach(function(card, index, array) {
-								append_card('.'+card.idList, card);
-							});
-						});
-
-						try{
-							Trello.rest('get', 'lists/'+ list_two.id +'/cards', function(cards){
-								cards.forEach(function(card, index, array) {
-									append_card('.'+card.idList, card);
-								});
-							});
-						} catch(x){}
-					}
-				})
-			})
-
-			function append_card(selector, card){
-				var name = card.name.substr(3, 49).trim() + ((card.name.length > 52) ? ' ...' : '');
-				$(selector).append('<div class="col-md-2 alert alert-info">'+ name +'</div>');
-			}
-		</script>
+		
 	
 	</body><object id="6929ba19-6878-a389-7919-2bae7ab58f81" width="0" height="0" type="application/gas-events-cef"></object></html>

@@ -10,7 +10,46 @@
 			width: calc(33.33333333% - 10px);
 			margin: 5px !important;
 			padding: 5px !important;
-			display: inline-flex;
+			display: inline;
+		}
+		.card-label {
+			color: #FFF;
+			float: right;
+			width: auto;
+			padding: 0px 0.5em !important;
+			margin: 0 2px;
+			display: inline;
+			line-height: 1.14286rem;
+			height: 11px;
+			font-size: 0.9rem;
+			position: relative;
+			text-overflow: ellipsis;
+			top: -9px;
+			right: -11px;
+		}
+
+		.card-label-green {
+			background-color: #61bd4f;
+		}
+
+		.card-label-purple {
+			background-color: #c377e0;
+		}
+
+		.card-label-blue {
+			background-color: #0079bf;
+		}
+
+		.card-label-orange {
+			background-color: #ffab4a;
+		}
+
+		.card-label-yellow {
+			background-color: #f2d600;
+		}
+
+		.card-label-black {
+			background-color: #4d4d4d;
 		}
 
 		@media (max-width: 780px) {
@@ -162,12 +201,12 @@
 			$(function(){
 				Trello.authorize({
 					type: 'redirect',
-					name: 'Getting Started Application',
+					name: 'Apisullog2.0 - Product Roadmap',
 					scope: {
 						read: true,
 					},
 					interactive: true,
-					expiration: 'never'
+					expiration: '1day'
 				});
 
 				Trello.rest('get', 'boards/zZPDBuHA/lists', function(data){
@@ -214,8 +253,23 @@
 			})
 
 			function append_card(selector, card){
-				var name = card.name.substr(3, 49).trim() + ((card.name.length > 52) ? ' ...' : '');
-				$(selector).append('<div class="col-md-2 alert alert-info">'+ name +'</div>');
+				var done = '', client = '';
+				var name = card.name.substr(3, 65).trim() + ((card.name.length > 68) ? ' ...' : '');
+				
+				var is_client = card.labels.filter(function(label) {
+					return label.color == "purple";
+				});
+				var is_done = card.labels.filter(function(label) {
+					return label.name == "Entregue";
+				});
+
+				if(is_client.length)
+					client = '<span class="card-label card-label-purple">'+ is_client[0].name +'</span>';
+
+				if(is_done.length)
+					done = '<span class="card-label card-label-green">Entregue</span>';
+				
+				$(selector).append('<div class="col-md-2 alert alert-info">'+ client + done + name +'</div>');
 			}
 		</script>
 	</body>
